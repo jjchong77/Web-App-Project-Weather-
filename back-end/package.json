@@ -1,0 +1,28 @@
+{
+  "name": "web-app-project-weather-",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjchong77/Web-App-Project-Weather-.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjchong77/Web-App-Project-Weather-/issues"
+  },
+  "homepage": "https://github.com/jjchong77/Web-App-Project-Weather-#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "jquery": "^3.3.1",
+    "jsdom": "^14.0.0",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.19",
+    "ws": "^6.2.0"
+  }
+}
