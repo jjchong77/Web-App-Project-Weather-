@@ -1,13 +1,4 @@
-<<<<<<< HEAD
-body
-{
- background-image: url("https://github.com/jjchong77/Web-App-Project-Weather-/blob/master/background.jpg?raw=true");
- background-color: #cccccc;
- 
- background-repeat: no-repeat;
- background-size: auto;
 
-}
 
 .middle {
   text-align: center;
@@ -18,10 +9,9 @@ color: black;
 text-align: center;
 padding: 1em 0.2em 0.2em 0.2em;
 }
-=======
 body
 {
- background-image: url("https://github.com/jjchong77/Web-App-Project-Weather-/blob/master/background.jpg?raw=true");
+ background-image: url("https://github.com/jjchong77/Web-App-Project-Weather-/blob/master/front-end/background.jpg?raw=true");
  background-color: #cccccc;
  background-repeat: no-repeat;
  background-size: auto;
@@ -36,4 +26,3 @@ color: black;
 text-align: center;
 padding: 1em 0.2em 0.2em 0.2em;
 }
->>>>>>> 13beca97ee29bce02a971b05509fc98bcf467f3b
