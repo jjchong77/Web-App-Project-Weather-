@@ -1,28 +1,31 @@
 
 
 .middle {
-  text-align: center;
-  color: black;
+    text-align: center;
+    color: black;
 }
+
 #banner {
-color: black;
-text-align: center;
-padding: 1em 0.2em 0.2em 0.2em;
+    color: black;
+    text-align: center;
+    padding: 1em 0.2em 0.2em 0.2em;
 }
+
 body
 {
- background-image: url("https://github.com/jjchong77/Web-App-Project-Weather-/blob/master/front-end/background.jpg?raw=true");
- background-color: #cccccc;
- background-repeat: no-repeat;
- background-size: auto;
+    background-image: url("https://github.com/jjchong77/Web-App-Project-Weather-/blob/master/front-end/background.jpg?raw=true");
+    background-color: #cccccc;
+    background-repeat: no-repeat;
+    background-size: auto;
 
 }
 
 .middle {
-  text-align: center;
+    text-align: center;
 }
+
 #banner {
-color: black;
-text-align: center;
-padding: 1em 0.2em 0.2em 0.2em;
+    color: black;
+    text-align: center;
+    padding: 1em 0.2em 0.2em 0.2em;
 }
