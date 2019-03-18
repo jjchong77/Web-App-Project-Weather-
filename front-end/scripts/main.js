@@ -1,33 +1,22 @@
 $(document).ready(function() { 
 
     const socket = new WebSocket('ws://localhost:8080');
-    var d = $(document.createElement('input'));
 
     $("#goButton").on('click', function() {
         var location = document.getElementById("loc").value;
         var temp = document.getElementById("temp").value;
         var range = document.getElementById("range").value;
 
-        socket.addEventListener('open', function (event) {
-            socket.send(location + "#" + temp + "#" + range);
-        });
+        socket.send(location + "#" + temp + "#" + range);
     });
 
     // Listen for messages
     socket.addEventListener('message', function (event) {
-        console.log('Message from server ', event.data);
-        
-        var weather="sunny";
-        var accessory="scarf";
-        var top="jacket";
-        var bottom="skirt";
-        var endstring="It is " + weather + ". You should take "+ accessory +". You should wear a "+ top + " and a " + bottom + ".";
-
-        $("#result").append("<p>" + endstring + "</p>")
+        $("#result").append("<p>" + event.data + "</p>")
     });
 });
 
-/*
+
 function calculate(location, comfort_temperature, range)
 {
     //use location to get data
