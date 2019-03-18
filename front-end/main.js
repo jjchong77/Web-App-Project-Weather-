@@ -8,6 +8,7 @@ function test (){
   alert("hi");
   var t= document.getElementById(temp).text;
   var l= document.getElementById(loc).value;
+  document.body.innerHTML="buttton";
   alert(l);
   alert(t);
 }
