@@ -1,7 +1,4 @@
 // Set up server
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 });
-
 var express = require('express');
 var app = express();
 app.set('port', process.env.PORT || 3000);
@@ -26,9 +23,15 @@ app.get ('/', function(request, response) {
     response.sendFile(path.join(__dirname + '/../front-end/index.html'));
 });
 
+app.post ('/', function(request, response) {
+    
+});
+
 app.listen(app.get('port'), function() {    
     console.log('Server listening on port ' + app.get('port')); 
 });
+
+
 
 function calClothing(location, comfortTemp, rangeTemp, docs) {
     var top = [];
@@ -39,11 +42,11 @@ function calClothing(location, comfortTemp, rangeTemp, docs) {
         if (element.type == 'top') {
             top.push(element)
         }
-        
+
         if (element.type == 'bot') {
             bot.push(element)
         }
-        
+
         if (element.type == 'accessory') {
             acc.push(element)
         }
@@ -59,23 +62,11 @@ function calClothing(location, comfortTemp, rangeTemp, docs) {
     });
 }
 
-// Wire up some logic for the connection event (when a client connects) 
-wss.on('connection', function connection(ws) {
-    ws.on('message', function incoming(message) {
-
-        var message = message.split('#')
-        var city = message[0];
-        var comfortTemp = message[1];
-        var rangeTemp = message[2];
-
-        //Connect to Database
-        client.connect(err => {
-            const collection = client.db("weather").collection("items");
-            collection.find().toArray(function (err, docs) {
-                //console.log(docs[0]);
-                calClothing(city, comfortTemp, rangeTemp, docs);
-            });
-            client.close();
-        });
+//Connect to Database
+client.connect(err => {
+    const collection = client.db("weather").collection("items");
+    collection.find().toArray(function (err, docs) {
+        console.log(docs);
     });
+    client.close();
 });
