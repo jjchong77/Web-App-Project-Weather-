@@ -98,8 +98,10 @@ function calClothing(location, comfortTemp, rangeTemp) {
     $.get("https://api.apixu.com/v1/forecast.json?key=03ab689a2dc0497d86e214654191303&q=" + location, function(data){
         //console.log(data.current.condition.code)
         var minTemp = comfortTemp - rangeTemp;
-        var maxTemp = comfortTemp + rangeTemp;
+        var maxTemp = parseInt(comfortTemp) + parseInt(rangeTemp);
         var condCode = data.current.condition.code
+        var currentTemp = data.current.temp_c;
+        var finalOutfit;
         var poss = [];
 
         if (condCode == 1000 && acc.sunny.length != 0) {
@@ -124,10 +126,26 @@ function calClothing(location, comfortTemp, rangeTemp) {
 
         $.each(top, function(topI, topE) {
             $.each(bot, function(botI, botE) {
-                var effectiveHeat = topE.heat
+                var effectiveHeat = topE.heat + botE.heat + choosenAcc.heat + currentTemp;
+                //console.log(effectiveHeat)
+
+                if (effectiveHeat >= minTemp && effectiveHeat <= maxTemp) {
+                    var delta = Math.abs(topE.heat - botE.heat);
+                    poss.push ({top: topE.name, bot: botE.name, acc: choosenAcc.name, delta: delta});
+                }
             });
         });
 
+        if (poss.length == 0) {
+            if (currentTemp > 0) {
+                poss.append({top: 'shirt', bot: 'short', acc: 'hat', delta: 2});
+            } else {
+                poss.append({top: 'heavy coat', bot: 'snow pants', acc: 'scarf', delta: 6});
+            }
+        }
+
+        finalOutfit = poss[0];
+        
     });
 }
 
