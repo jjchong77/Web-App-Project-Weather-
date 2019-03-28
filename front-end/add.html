@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        
+        <meta charset="utf-8">
+        <title>Intro</title>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+        <script type="text/javascript" src="scripts/main.js"></script>
+        
+    </head>
+    <body>
+        <h1>Form for adding data</h1>
+
+        <!--Add to database-->
+        <form id = "clothingForm" method="post">
+            
+            <label>Enter category, name, and heat.</label><br>
+            
+            <input type="text" name="type" id = "type" placeholder="'top'/'bot'/'accessory'" required>
+            <input type="text" name="name" id="name" placeholder="Name" required>
+            <input type="number" name="heat" id="heat" min="0" max="10" placeholder="1-10°C">
+
+            <button> Add Item </button>
+            
+            <!--Showcase Database-->
+            <div id = "database" ></div>
+            
+        </form>
+
+        <form id = "finishOutfitForm" method="post">
+            <button onclick = "locationtemprange()"> Next </button>
+        </form>
+        
+        
+
+    </body>
+</html>
+<!--input type="submit" value="Add Item"--!>

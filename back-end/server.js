@@ -12,22 +12,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //Database
-//const MongoClient = require('mongodb').MongoClient;
-//const uri = "mongodb+srv://test_user:password1234@cluster0-grpgd.mongodb.net/test?retryWrites=true";
-//const client = new MongoClient(uri, { useNewUrlParser: true });
-
 var mongoose = require("mongoose");
 // edit "testdb" to "weather" to choose database
 mongoose.connect("mongodb+srv://test2:pass123@cluster0-grpgd.mongodb.net/weather?retryWrites=true");
-
 var nameSchema = new mongoose.Schema({
     type: String,
     name: String,
     heat: Number,
     weather: String
 });
-
 const Items = mongoose.model('items', nameSchema);
+const tobedeleted = mongoose.model('tobedeleteds', nameSchema);
 
 
 //Jquery
@@ -40,6 +35,7 @@ var $ = jQuery = require('jquery')(window);
 
 //---------------------------------------------------------------------------
 var db = [];
+var user = [];
 
 Items.find({}, function (error, documents) {
     db = documents
@@ -58,69 +54,40 @@ app.post ('/', function(request, response) {
     //response.send(calClothing(loc, temp, range));
 });
 
-app.get('/indexx.html', function(req,res) {
-    console.log("Hello")
-    data= fs.readFile('/../front-end/indexx.html',   function (err, data) {
+app.get('/adddelete.html', function(req,res) {
+    //console.log("Hello")
+    data= fs.readFile('/../front-end/adddelete.html',   function (err, data) {
         res.setHeader('Content-Type', 'text/html');
         res.send(data);
     });
 });
 
-app.post("/addname", (req, res) => {
-    /*
-    var myData = new Item(req.body); //gets data from fields
-    myData.save() //puts item into db
-        .then
-    (item => {
-        console.log("item saved to database");
-    })
-        .catch(err => {
-        //res.status(400).send("unable to save to database");
-    });
-    */
+app.post("/adddelete.html/add", (req, res) => {
+
+    var awesome_instance = new tobedeleted(req.body);
+    //console.log(awesome_instance)
+
+    awesome_instance.save(function (err, book) {
+        if (err) return console.error(err);
+        console.log(book.name + " saved to bookstore collection.");
+    }); 
 });
 
-app.post("/delcol", (req, res) =>{
-    foo();
-    /*
-    mongoose.connection.db.dropCollection('items', function(err, result)
-                                          {
-        if (err)
-        {
-            console.log ("error deleting");
-            //throw (err);
-            alert("already cleared");
+app.post("/adddelete.html/delete", (req, res) =>{
+
+    mongoose.connection.dropCollection("tobedeleteds", function (err, result) {
+        if (err) {
+            console.log("error delete collection");
+        } else {
+
+            console.log("delete collection success");
         }
-        console.log("Database cleared!");
     });
-
-    //trying to delete
-*/
 });
-
-//Connect to Database
-/*
-client.connect(err => {
-    const collection = client.db("weather").collection("items");
-    collection.find().toArray(function (err, docs) {
-        db = docs;
-    });
-    client.close();
-
-    app.listen(app.get('port'), function() {    
-        console.log('Server listening on port ' + app.get('port')); 
-    });
-
-});
-*/
 
 app.listen(app.get('port'), function() {    
     console.log('Server listening on port ' + app.get('port')); 
 });
-
-var foo = function() {
-    console.log("delete function running");
-};
 
 function calClothing(location, comfortTemp, rangeTemp, response) {
     var top = [];

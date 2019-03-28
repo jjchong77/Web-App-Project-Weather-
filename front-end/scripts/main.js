@@ -1,6 +1,19 @@
 $(document).ready(function() { 
 
     // Client - Server Handler
+    $("#userForm").submit(function(event){
+        event.preventDefault();
+        
+        var user = document.getElementById("user").value;
+
+        $.ajax({
+            method: 'post',
+            url: '/',
+            data: JSON.stringify({ user: user }),
+            contentType: 'application/json',
+        })
+    });
+/*
     $("#form").submit(function(event){
         event.preventDefault();
         var location = document.getElementById("loc").value;
@@ -17,14 +30,63 @@ $(document).ready(function() {
                 console.log("form")
                 console.log(data)
                 //console.log(data.type)
+                //$("#result").html(data.top);
+            }
+        })
+    });
+
+    $("#clothingForm").submit(function(event){
+        event.preventDefault();
+        var type = document.getElementById("type").value;
+        var name = document.getElementById("name").value;
+        var heat = document.getElementById("heat").value;
+        console.log(type + " " + name + " " + heat)
+        $.ajax({
+            method: 'post',
+            url: '/adddelete.html/add',
+            data: JSON.stringify({ type: type, name: name, heat: heat }),
+            contentType: 'application/json',
+        })
+    });
+
+    $("#deleteForm").submit(function(event){
+        event.preventDefault();
+
+        $.ajax({
+            method: 'post',
+            url: '/adddelete.html/delete',
+            contentType: 'application/json',
+        })
+    });
+    
+    $("#resultForm").submit(function(event){
+        event.preventDefault();
+
+        $.ajax({
+            method: 'post',
+            url: '/result.htm/result',
+            contentType: 'application/json',
+
+            success: function(data) {
+                console.log("resultForm")
+                console.log(data)
                 $("#result").html(data.top);
             }
         })
     });
+    */
 });
 
-function contactus() {
-    document.location="indexx.html";
+function add() {
+    document.location = "add.html";
+}
+
+function locationtemprange() {
+    document.location = "locationtemprange.html";
+}
+
+function result() {
+    document.location = "result.html";
 }
 
 /*
