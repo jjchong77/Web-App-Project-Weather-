@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Intro</title>
+    </head>
+    <body>
+        <h1>Form for adding data</h1>
+        
+        <form method="post" action="/addname">
+            <label>Enter category, name, and heat.</label><br>
+            <input type="text" name="type" placeholder="'top'/'bot'/'accessory'" required>
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="number" name="heat" min="0" max="10" placeholder="1-10°C">
+            
+            <button> Add Item </button>
+        </form>
+
+        <form method="post" action="/delcol">
+            <button> finish </button>
+        </form>
+
+    </body>
+</html>
+<!--input type="submit" value="Add Item"--!>

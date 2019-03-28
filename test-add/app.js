@@ -28,6 +28,7 @@ var nameSchema = new mongoose.Schema({
 });
 
 var Item = mongoose.model(dbname, nameSchema);//collection is based on Item, can change all instances of "item" to choose a different db
+
 //determines collection (+'s'), with first argument
 app.get("/", (req, res) =>
 {
@@ -69,7 +70,6 @@ app.post("/delcol", (req, res) =>{
 
 });
 
-
 app.post("/addname", (req, res) => {
 
   var myData = new Item(req.body); //gets data from fields
@@ -79,7 +79,7 @@ app.post("/addname", (req, res) => {
       console.log("item saved to database");
     })
     .catch(err => {
-      res.status(400).send("unable to save to database");
+      //res.status(400).send("unable to save to database");
     });
 });
 

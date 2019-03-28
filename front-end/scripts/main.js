@@ -1,22 +1,33 @@
 $(document).ready(function() { 
 
-    const socket = new WebSocket('ws://localhost:8080');
-
-    $("#goButton").on('click', function() {
+    // Client - Server Handler
+    $("#form").submit(function(event){
+        event.preventDefault();
         var location = document.getElementById("loc").value;
-        var temp = document.getElementById("temp").value;
+        var temperature = document.getElementById("temp").value;
         var range = document.getElementById("range").value;
 
-        socket.send(location + "#" + temp + "#" + range);
-    });
+        $.ajax({
+            method: 'post',
+            url: '/',
+            data: JSON.stringify({ location: location, temperature: temperature, range: range }),
+            contentType: 'application/json',
 
-    // Listen for messages
-    socket.addEventListener('message', function (event) {
-        $("#result").append("<p>" + event.data + "</p>")
+            success: function(data) {
+                console.log("form")
+                console.log(data)
+                //console.log(data.type)
+                $("#result").html(data.top);
+            }
+        })
     });
 });
 
+function contactus() {
+    document.location="indexx.html";
+}
 
+/*
 function calculate(location, comfort_temperature, range)
 {
     //use location to get data
