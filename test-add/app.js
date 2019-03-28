@@ -56,7 +56,12 @@ app.post("/delcol", (req, res) =>{
 
     mongoose.connection.db.dropCollection('items', function(err, result)
     {
-      if (err) console.log ("error deleting");
+      if (err)
+      {
+        console.log ("error deleting");
+        //throw (err);
+        alert("already cleared");
+    }
       console.log("Database cleared!");
     });
 
