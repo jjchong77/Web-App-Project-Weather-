@@ -21,9 +21,9 @@ var nameSchema = new mongoose.Schema({
     heat: Number,
     weather: String
 });
-const Items = mongoose.model('items', nameSchema);
-const tobedeleted = mongoose.model('tobedeleteds', nameSchema);
-
+//const Items = mongoose.model('items', nameSchema);
+//const tobedeleted = mongoose.model('tobedeleteds', nameSchema);
+var outfitDB;
 
 //Jquery
 var jsdom = require("jsdom");
@@ -35,25 +35,70 @@ var $ = jQuery = require('jquery')(window);
 
 //---------------------------------------------------------------------------
 var db = [];
-var user = [];
+var user;
+var loc;
+var temp;
+var range;
 
+/*
 Items.find({}, function (error, documents) {
     db = documents
 });
+*/
 
+// Login Page
 app.get ('/', function(request, response) {
     response.sendFile(path.join(__dirname + '/../front-end/index.html'));
 });
 
 app.post ('/', function(request, response) {
+    user = request.body.user;
+    outfitDB = mongoose.model(user, nameSchema);
+    //console.log("intro " + outfitDB);
+});
+
+// Add Page 
+
+app.post("/add.html/add", (req, res) => {
+    console.log("/add.html/add")
+    var awesome_instance = new outfitDB(req.body);
+
+    awesome_instance.save(function (err, book) {
+        if (err) return console.error(err);
+        console.log(book.name + " saved to bookstore collection.");
+    }); 
+});
+
+// Weather Page
+app.post("/weather.html/add", (req, res) => {
+    console.log("/weather.html/add")
+
+    loc = request.body.location;
+    temp = request.body.temperature;
+    range = request.body.range;
+});
+
+// Result Page 
+app.post("/result.html/add", (req, res) => {
+    console.log("/result.html/add")
+
+    console.log(loc + " " + temp + " " + range)
+});
+
+app.listen(app.get('port'), function() {    
+    console.log('Server listening on port ' + app.get('port')); 
+});
+
+/*
     var loc = request.body.location;
     var temp = request.body.temperature;
     var range = request.body.range;
     //console.log(db);
     calClothing(loc, temp, range, response);
     //response.send(calClothing(loc, temp, range));
-});
+*/
 
+/*
 app.get('/adddelete.html', function(req,res) {
     //console.log("Hello")
     data= fs.readFile('/../front-end/adddelete.html',   function (err, data) {
@@ -83,10 +128,6 @@ app.post("/adddelete.html/delete", (req, res) =>{
             console.log("delete collection success");
         }
     });
-});
-
-app.listen(app.get('port'), function() {    
-    console.log('Server listening on port ' + app.get('port')); 
 });
 
 function calClothing(location, comfortTemp, rangeTemp, response) {
@@ -207,4 +248,4 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
-
+*/

@@ -3,7 +3,7 @@ $(document).ready(function() {
     // Client - Server Handler
     $("#userForm").submit(function(event){
         event.preventDefault();
-        
+
         var user = document.getElementById("user").value;
 
         $.ajax({
@@ -13,7 +13,51 @@ $(document).ready(function() {
             contentType: 'application/json',
         })
     });
-/*
+
+    $("#clothingForm").submit(function(event){
+        event.preventDefault();
+        var type = document.getElementById("type").value;
+        var name = document.getElementById("name").value;
+        var heat = document.getElementById("heat").value;
+
+        console.log(type + " " + name + " " + heat)
+
+        $.ajax({
+            method: 'post',
+            url: '/add.html/add',
+            data: JSON.stringify({ type: type, name: name, heat: heat }),
+            contentType: 'application/json',
+        })
+    });
+
+    $("#weatherForm").submit(function(event){
+        event.preventDefault();
+        var location = document.getElementById("loc").value;
+        var temperature = document.getElementById("temp").value;
+        var range = document.getElementById("range").value;
+
+        $.ajax({
+            method: 'post',
+            url: '/weather.html/add',
+            data: JSON.stringify({ location: location, temperature: temperature, range: range }),
+            contentType: 'application/json',
+        })
+    });
+
+    $("#resultForm").submit(function(event){
+        event.preventDefault();
+
+        $.ajax({
+            method: 'post',
+            url: '/result.html/add',
+
+            success: function(data) {
+                console.log(data)
+                $("#result").html(data.top)
+            }
+        })
+    });
+    /*
     $("#form").submit(function(event){
         event.preventDefault();
         var location = document.getElementById("loc").value;
@@ -58,7 +102,7 @@ $(document).ready(function() {
             contentType: 'application/json',
         })
     });
-    
+
     $("#resultForm").submit(function(event){
         event.preventDefault();
 
@@ -81,8 +125,8 @@ function add() {
     document.location = "add.html";
 }
 
-function locationtemprange() {
-    document.location = "locationtemprange.html";
+function weather() {
+    document.location = "weather.html";
 }
 
 function result() {
