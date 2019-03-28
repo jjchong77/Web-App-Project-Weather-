@@ -36,9 +36,9 @@ app.post ('/', function(request, response) {
     var temp = request.body.temperature;
     var range = request.body.range;
 
-    calClothing(loc, temp, range);
-
-    response.send("10");
+    console.log("post")
+    calClothing(loc, temp, range, response);
+    //response.send(calClothing(loc, temp, range));
 });
 
 //Connect to Database
@@ -55,7 +55,7 @@ client.connect(err => {
 
 });
 
-function calClothing(location, comfortTemp, rangeTemp) {
+async function calClothing(location, comfortTemp, rangeTemp, response) {
     var top = [];
     var bot = [];
     var acc = {snowy: [], sunny: [], rain: [], default: []};
@@ -63,6 +63,7 @@ function calClothing(location, comfortTemp, rangeTemp) {
     var choosenTop = [];
     var choosenBot = [];
     var choosenAcc;
+    var finalOutfit;
 
     $.each(db, function(index, element) {
         if (element.type == 'top') {
@@ -95,13 +96,12 @@ function calClothing(location, comfortTemp, rangeTemp) {
         }
     });
 
-    $.get("https://api.apixu.com/v1/forecast.json?key=03ab689a2dc0497d86e214654191303&q=" + location, function(data){
+    $.getJSON("https://api.apixu.com/v1/forecast.json?key=03ab689a2dc0497d86e214654191303&q=" + location, function(data){
         //console.log(data.current.condition.code)
         var minTemp = comfortTemp - rangeTemp;
         var maxTemp = parseInt(comfortTemp) + parseInt(rangeTemp);
         var condCode = data.current.condition.code
         var currentTemp = data.current.temp_c;
-        var finalOutfit;
         var poss = [];
 
         if (condCode == 1000 && acc.sunny.length != 0) {
@@ -144,9 +144,31 @@ function calClothing(location, comfortTemp, rangeTemp) {
             }
         }
 
+        //Default outfit
         finalOutfit = poss[0];
-        
+
+        if (poss.length > 1) {
+            var possOutfits = []
+            var baseDelta = poss.reduce((min, p) => p.delta < min ? p.delta : min, poss[0].delta);
+
+            $.each(poss, function(possI, possE) {
+                if (possE.delta == baseDelta) {
+                    possOutfits.push(possE)
+                }
+            });
+
+            if (possOutfits.length > 1) {
+                finalOutfit = possOutfits[getRandomInt(0, possOutfits.length)];
+            }
+        }
+
+        console.log("1")
+        console.log(finalOutfit)
+        response.send(finalOutfit);
     });
+    
+    console.log("return")
+    return finalOutfit;
 }
 
 function getRandomInt(min, max) {
