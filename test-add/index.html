@@ -10,10 +10,15 @@
       <label>Enter category, name, and heat.<label><br>
       <input type="text" name="type" placeholder="'top'/'bot'/'accessory'" required>
       <input type="text" name="name" placeholder="Name" required>
-      <!---input type="text" name="heat" placeholder="Enter nick name..." required---!>
       <input type="number" name="heat" min="0" max="10" placeholder="1-10°C">
-      <input type="submit" value="Add Name">
+
+      <button> Add Item </button>
+    </form>
+
+    <form method="post" action="/delcol">
+      <button> finish </button>
     </form>
 
   </body>
 </html>
+<!--input type="submit" value="Add Item"--!>
