@@ -19,6 +19,6 @@ A challenge that everyone faces is the weather, and being comfortable in it. Wea
 
 ## Direction Manual
 1. In Data, enter your name to retrieve your own personal database.
-2. Once you're in your own database, enter any number of clothing items and accessories
+2. Once you're in your own database, enter any number of clothing items and accessories. (You must have at least one top, bottom, and accessory.)
 3. In Parameters, enter how warm you want to feel, and the variance - how much you're willing to compromise on that.
 4. In Results, hit get results. Afterwards, you can change parameters to try again, or clear the database.
