@@ -44,22 +44,22 @@ app.get ('/', function(request, response) {
 app.post ('/', function(request, response) {
     user = request.body.user;
     outfitdbModel = mongoose.model(user, nameSchema);
-    //console.log("intro " + outfitDB);
+    console.log("intro " + user);
 });
 
 // Add Page 
-app.post("/add.html", (req, res) => {
-    console.log("/add.html/add")
+app.post("/add", (req, res) => {
+    console.log("/add")
     var awesome_instance = new outfitdbModel(req.body);
 
-    awesome_instance.save(function (err, book) {
+    awesome_instance.save(function (err, item) {
         if (err) return console.error(err);
-        console.log(book.name + " saved to bookstore collection.");
+        console.log(item.name + " saved to collection.");
     }); 
 });
 
 // Weather Page
-app.post("/weather.html", (req, res) => {
+app.post("/weather", (req, res) => {
     console.log("/weather.html/add")
 
     loc = req.body.location;
@@ -70,50 +70,63 @@ app.post("/weather.html", (req, res) => {
 });
 
 // Result Page 
-app.post("/result.html", (req, res) => {
-    outfitdbModel.find({}, function (error, documents) {
-        db = documents;
-        console.log(documents)
+app.post("/result", (req, res) => {
+    console.log("/result.html")
+    if (typeof user == 'undefined'){
+        console.log("/undefined.html")
+        res.send("Please set your database name first.")
+    } else {
+        console.log("/else.html")
+        outfitdbModel.find({}, function (error, documents) {
+            db = documents;
+            //console.log(documents)
+            //console.log(loc + " " + temp + " " + range)
+            //console.log(db)
 
-        console.log("/result.html")
-        console.log(loc + " " + temp + " " + range)
-        //console.log(db)
+            var topExist = false;
+            var botExist = false;
+            var accExist = false;
 
-        var topExist = false;
-        var botExist = false;
-        var accExist = false;
+            for (var i = 0; i < db.length; i++){
+                if (db[i].type == 'top') {
+                    topExist = true;
+                }
 
-        for (var i = 0; i < db.length; i++){
-            if (db[i].type == 'top') {
-                topExist = true;
+                if (db[i].type == 'bot') {
+                    botExist = true;
+                }
+
+                if (db[i].type == 'acc') {
+                    accExist = true;
+                }
             }
 
-            if (db[i].type == 'bot') {
-                botExist = true;
-            }
-
-            if (db[i].type == 'acc') {
-                accExist = true;
-            }
-        }
-
-        if (typeof loc !== 'undefined' && typeof temp !== 'undefined' && typeof range !== 'undefined' && topExist && botExist && accExist) {
-            calClothing(loc, temp, range, res)
-        } else {
-            res.send("Please input at least one Top, Bottom and Accessory Item. Also, please make sure that you have submitted Location, Temperature and Temperature Variance.");
-        }  
-    });
+            if (typeof loc !== 'undefined' && typeof temp !== 'undefined' && typeof range !== 'undefined' && topExist && botExist && accExist) {
+                calClothing(loc, temp, range, res)
+            } else {
+                res.send("Please input at least one Top, Bottom and Accessory Item. Also, please make sure that you have submitted Location, Temperature and Temperature Variance.");
+            }  
+        });
+    }
 });
 
-app.post("/result.html/delete", (req, res) =>{
-
-    mongoose.connection.dropCollection(user+"s", function (err, result) {
-        if (err) {
-            console.log("error delete collection");
-        } else {
-            console.log("delete collection success");
-        }
-    });
+app.post("/result/delete", (req, res) =>{
+    console.log('delete')
+    if (typeof user == 'undefined'){
+        res.send("Please set your database name first.")
+    } else {
+        
+        var collName = Object.keys(outfitdbModel.db.collections)[0];
+        mongoose.connection.dropCollection(collName, function (err, result) {
+            if (err) {
+                console.log("error delete collection");
+                res.send("Failed to delete Database.")
+            } else {
+                console.log("delete collection success");
+                res.send("Database Deleted.")
+            }
+        });
+    }
 });
 
 app.listen(app.get('port'), function() {    
