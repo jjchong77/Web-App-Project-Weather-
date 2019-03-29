@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Database
 var mongoose = require("mongoose");
 // edit "testdb" to "weather" to choose database
-mongoose.connect("mongodb+srv://test2:pass123@cluster0-grpgd.mongodb.net/weather?retryWrites=true");
+mongoose.connect("mongodb+srv://test2:pass123@cluster0-grpgd.mongodb.net/weather?retryWrites=true", { useNewUrlParser: true });
 var nameSchema = new mongoose.Schema({
     type: String,
     name: String,
@@ -45,6 +45,10 @@ app.post ('/', function(request, response) {
     user = request.body.user;
     outfitdbModel = mongoose.model(user, nameSchema);
     console.log("intro " + user);
+    outfitdbModel.find({}, function (error, documents) {
+        //console.log(documents)
+        response.send(documents);
+    });
 });
 
 // Add Page 
@@ -54,8 +58,13 @@ app.post("/add", (req, res) => {
 
     awesome_instance.save(function (err, item) {
         if (err) return console.error(err);
-        console.log(item.name + " saved to collection.");
-    }); 
+        console.log(item.name + " saved to collection."); 
+
+        outfitdbModel.find({}, function (error, documents) {
+            //console.log(documents)
+            res.send(documents);
+        });
+    });
 });
 
 // Weather Page
@@ -79,9 +88,6 @@ app.post("/result", (req, res) => {
         console.log("/else.html")
         outfitdbModel.find({}, function (error, documents) {
             db = documents;
-            //console.log(documents)
-            //console.log(loc + " " + temp + " " + range)
-            //console.log(db)
 
             var topExist = false;
             var botExist = false;
@@ -115,7 +121,7 @@ app.post("/result/delete", (req, res) =>{
     if (typeof user == 'undefined'){
         res.send("Please set your database name first.")
     } else {
-        
+
         var collName = Object.keys(outfitdbModel.db.collections)[0];
         mongoose.connection.dropCollection(collName, function (err, result) {
             if (err) {
@@ -146,13 +152,9 @@ function calClothing(location, comfortTemp, rangeTemp, response) {
     $.each(db, function(index, element) {
         if (element.type == 'top') {
             top.push(element)
-        }
-
-        if (element.type == 'bot') {
+        } else if (element.type == 'bot') {
             bot.push(element)
-        }
-
-        if (element.type == 'acc') {
+        } else if (element.type == 'acc') {
             switch(element.weather) {
                 case 'snowy':
                     acc.snowy.push({name: element.name,
@@ -171,7 +173,7 @@ function calClothing(location, comfortTemp, rangeTemp, response) {
                                       heat: element.heat});
                     break;
             }
-        }
+        } 
     });
 
     console.log(top)
@@ -220,9 +222,9 @@ function calClothing(location, comfortTemp, rangeTemp, response) {
 
         if (poss.length == 0) {
             if (currentTemp > 0) {
-                poss.append({top: 'shirt', bot: 'short', acc: 'hat', delta: 2});
+                poss.push({top: 'shirt', bot: 'short', acc: 'hat', delta: 2});
             } else {
-                poss.append({top: 'heavy coat', bot: 'snow pants', acc: 'scarf', delta: 6});
+                poss.push({top: 'heavy coat', bot: 'snow pants', acc: 'scarf', delta: 6});
             }
         }
 

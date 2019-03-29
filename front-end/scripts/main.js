@@ -11,6 +11,18 @@ $(document).ready(function() {
             url: '/',
             data: JSON.stringify({ user: user }),
             contentType: 'application/json',
+
+            success: function(data) {
+                //console.log(data)
+                if (data.constructor === Array) {
+                    $("#wardrobe").html("<tr></tr>");
+                    $.each(data, function(index, element) {
+                        $("#wardrobe tr:last").after("<tr> <td>" + element.type + "</td><td>" + element.name + "</td><td>" + element.heat + "</td><td>" + element.weather + "</td></tr>");
+                    });
+                } else {
+                    $("#warning").html("Something Went Wrong!");
+                }
+            }
         })
     });
 
@@ -28,7 +40,19 @@ $(document).ready(function() {
             url: '/add',
             data: JSON.stringify({ type: type, name: name, heat: heat, weather: weather}),
             contentType: 'application/json',
-        })
+
+            success: function(data) {
+                //console.log(data)
+                if (data.constructor === Array) {
+                    $("#wardrobe").html("<tr></tr>");
+                    $.each(data, function(index, element) {
+                        $("#wardrobe tr:last").after("<tr> <td>" + element.type + "</td><td>" + element.name + "</td><td>" + element.heat + "</td><td>" + element.weather + "</td></tr>");
+                    });
+                } else {
+                    $("#warning").html("Something Went Wrong!");
+                }
+            }
+        });
     });
 
     $("#weatherForm").submit(function(event){
