@@ -1,6 +1,7 @@
 $(document).ready(function() { 
 
     // Client - Server Handler
+    // Set Database name
     $("#userForm").submit(function(event){
         event.preventDefault();
 
@@ -13,7 +14,6 @@ $(document).ready(function() {
             contentType: 'application/json',
 
             success: function(data) {
-                //console.log(data)
                 if (data.constructor === Array) {
                     $("#wardrobe").html("<tr></tr>");
                     $.each(data, function(index, element) {
@@ -26,14 +26,13 @@ $(document).ready(function() {
         })
     });
 
+    // Add to Database
     $("#clothingForm").submit(function(event){
         event.preventDefault();
         var type = document.getElementById("type").value;
         var name = document.getElementById("name").value;
         var heat = document.getElementById("heat").value;
         var weather = document.getElementById("weather").value;
-
-        console.log(type + " " + name + " " + heat)
 
         $.ajax({
             method: 'post',
@@ -42,7 +41,6 @@ $(document).ready(function() {
             contentType: 'application/json',
 
             success: function(data) {
-                //console.log(data)
                 if (data.constructor === Array) {
                     $("#wardrobe").html("<tr></tr>");
                     $.each(data, function(index, element) {
@@ -55,6 +53,7 @@ $(document).ready(function() {
         });
     });
 
+    // Submit parameters
     $("#weatherForm").submit(function(event){
         event.preventDefault();
         var location = document.getElementById("loc").value;
@@ -68,7 +67,6 @@ $(document).ready(function() {
             contentType: 'application/json',
 
             success: function(data) {
-                //console.log(data)
                 if (data.constructor == Object) {
                     $("#forecast").html("");
                     
@@ -93,16 +91,15 @@ $(document).ready(function() {
 
     });
 
+    // Get Result
     $("#resultForm").submit(function(event){
         event.preventDefault();
-        console.log("resultForm");
         $.ajax({
             method: 'post',
             url: '/result',
             contentType: 'application/json',
 
             success: function(data) {
-                console.log(data)
                 if (data.constructor == Object) {
                     $("#top").html(data.top);
                     $("#bot").html(data.bot);
@@ -114,6 +111,7 @@ $(document).ready(function() {
         })
     });
 
+    // Delete Database
     $("#deleteForm").submit(function(event){
         event.preventDefault();
 

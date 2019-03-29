@@ -2,6 +2,7 @@
 var express = require('express');
 var app = express();
 
+// Set port to 3000
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + "/../front-end"));
 
@@ -13,7 +14,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Database
 var mongoose = require("mongoose");
-// edit "testdb" to "weather" to choose database
 mongoose.connect("mongodb+srv://test2:pass123@cluster0-grpgd.mongodb.net/weather?retryWrites=true", { useNewUrlParser: true });
 var nameSchema = new mongoose.Schema({
     type: String,
@@ -36,22 +36,23 @@ var db = [];
 var user;
 var loc, temp, range;
 
-// Login Page
+// Load Initial Index/Database Page
 app.get ('/', function(request, response) {
     response.sendFile(path.join(__dirname + '/../front-end/index.html'));
 });
 
+// Set Database Name
 app.post ('/', function(request, response) {
     user = request.body.user;
     outfitdbModel = mongoose.model(user, nameSchema);
     console.log("intro " + user);
+    
     outfitdbModel.find({}, function (error, documents) {
-        //console.log(documents)
         response.send(documents);
     });
 });
 
-// Add Page 
+// Add to User Database 
 app.post("/add", (req, res) => {
     console.log("/add")
     var awesome_instance = new outfitdbModel(req.body);
@@ -61,15 +62,14 @@ app.post("/add", (req, res) => {
         console.log(item.name + " saved to collection."); 
 
         outfitdbModel.find({}, function (error, documents) {
-            //console.log(documents)
             res.send(documents);
         });
     });
 });
 
-// Weather Page
+// Submit Location, Comfort Temperature and Variance
 app.post("/weather", (req, res) => {
-    console.log("/weather.html/add")
+    console.log("/weather")
 
     loc = req.body.location;
     temp = req.body.temperature;
@@ -82,14 +82,13 @@ app.post("/weather", (req, res) => {
     }); 
 });
 
-// Result Page 
+// Get Result Button 
 app.post("/result", (req, res) => {
-    console.log("/result.html")
+    console.log("/result")
+    
     if (typeof user == 'undefined'){
-        console.log("/undefined.html")
         res.send("Please set your database name first.")
     } else {
-        console.log("/else.html")
         outfitdbModel.find({}, function (error, documents) {
             db = documents;
 
@@ -120,8 +119,9 @@ app.post("/result", (req, res) => {
     }
 });
 
+// Delete Database
 app.post("/result/delete", (req, res) =>{
-    console.log('delete')
+    console.log('/delete')
     if (typeof user == 'undefined'){
         res.send("Please set your database name first.")
     } else {
@@ -139,10 +139,12 @@ app.post("/result/delete", (req, res) =>{
     }
 });
 
+// Port Listener
 app.listen(app.get('port'), function() {    
     console.log('Server listening on port ' + app.get('port')); 
 });
 
+// Calculate the best combinations of outfit to wear
 function calClothing(location, comfortTemp, rangeTemp, response) {
     var top = [];
     var bot = [];
@@ -255,6 +257,7 @@ function calClothing(location, comfortTemp, rangeTemp, response) {
     });
 }
 
+// If there are multiple possible outfit then choose one randomly
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
