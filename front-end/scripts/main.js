@@ -65,8 +65,32 @@ $(document).ready(function() {
             method: 'post',
             url: '/weather',
             data: JSON.stringify({ location: location, temperature: temperature, range: range }),
-            contentType: 'application/json'
+            contentType: 'application/json',
+
+            success: function(data) {
+                //console.log(data)
+                if (data.constructor == Object) {
+                    $("#forecast").html("");
+                    
+                    var forecast = data.forecast.forecastday;
+                    $("#forecast").append("<h2>Forecast: </h2>");
+                    $("#forecast").append("<table class = table><tr><th>Date</th><th>Condition</th><th>High</th><th>Low</th><th>Wind</th><th>Outlook</th></tr></table>");
+
+                    $.each(forecast, function(index, element) {
+
+                        $("#forecast tr:last").after("<tr><td>" + element.date + "</td><td id = image" + index + "></td><td>" + element.day.maxtemp_c + " C</td><td>" + element.day.mintemp_c + " C</td><td>" + element.day.maxwind_kph + " km/h</td><td>" + element.day.condition.text +"</td></tr>");
+
+                        var path = "http:" + element.day.condition.icon;
+                        var target = "#image" + index;
+                        $(target).prepend('<img src= "' + path + '"/>')
+
+                    });
+                } else {
+                    $("#forecast").html("Something Went Wrong!");
+                }
+            }
         })
+
     });
 
     $("#resultForm").submit(function(event){

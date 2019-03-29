@@ -75,7 +75,11 @@ app.post("/weather", (req, res) => {
     temp = req.body.temperature;
     range = req.body.range;
 
-    console.log(loc + " " + temp + " " + range)
+    console.log(loc + " " + temp + " " + range);
+
+    $.get("https://api.apixu.com/v1/forecast.json?key=03ab689a2dc0497d86e214654191303&q="+ loc + "&days=7", function(data){
+        res.send(data);
+    }); 
 });
 
 // Result Page 
@@ -246,7 +250,6 @@ function calClothing(location, comfortTemp, rangeTemp, response) {
             }
         }
 
-        console.log("1")
         console.log(finalOutfit)
         response.send(finalOutfit);
     });
