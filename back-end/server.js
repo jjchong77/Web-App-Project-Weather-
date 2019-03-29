@@ -210,12 +210,15 @@ function calClothing(location, comfortTemp, rangeTemp, response) {
 
             choosenAcc = acc.default[getRandomInt(0, acc.default.length)];
 
+        } else {
+            choosenAcc = {name: 'Nothing', heat: 0};
         }
 
-        //console.log(choosenAcc)
+        console.log(choosenAcc)
 
         $.each(top, function(topI, topE) {
             $.each(bot, function(botI, botE) {
+                console.log(topE.heat + " " + botE.heat + " " + choosenAcc.heat)
                 var effectiveHeat = topE.heat + botE.heat + choosenAcc.heat + currentTemp;
                 //console.log(effectiveHeat)
 
