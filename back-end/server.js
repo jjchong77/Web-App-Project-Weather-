@@ -21,9 +21,7 @@ var nameSchema = new mongoose.Schema({
     heat: Number,
     weather: String
 });
-//const Items = mongoose.model('items', nameSchema);
-//const tobedeleted = mongoose.model('tobedeleteds', nameSchema);
-var outfitDB;
+var outfitdbModel;
 
 //Jquery
 var jsdom = require("jsdom");
@@ -36,15 +34,7 @@ var $ = jQuery = require('jquery')(window);
 //---------------------------------------------------------------------------
 var db = [];
 var user;
-var loc;
-var temp;
-var range;
-
-/*
-Items.find({}, function (error, documents) {
-    db = documents
-});
-*/
+var loc, temp, range;
 
 // Login Page
 app.get ('/', function(request, response) {
@@ -53,15 +43,14 @@ app.get ('/', function(request, response) {
 
 app.post ('/', function(request, response) {
     user = request.body.user;
-    outfitDB = mongoose.model(user, nameSchema);
+    outfitdbModel = mongoose.model(user, nameSchema);
     //console.log("intro " + outfitDB);
 });
 
 // Add Page 
-
-app.post("/add.html/add", (req, res) => {
+app.post("/add.html", (req, res) => {
     console.log("/add.html/add")
-    var awesome_instance = new outfitDB(req.body);
+    var awesome_instance = new outfitdbModel(req.body);
 
     awesome_instance.save(function (err, book) {
         if (err) return console.error(err);
@@ -70,64 +59,65 @@ app.post("/add.html/add", (req, res) => {
 });
 
 // Weather Page
-app.post("/weather.html/add", (req, res) => {
+app.post("/weather.html", (req, res) => {
     console.log("/weather.html/add")
 
-    loc = request.body.location;
-    temp = request.body.temperature;
-    range = request.body.range;
-});
-
-// Result Page 
-app.post("/result.html/add", (req, res) => {
-    console.log("/result.html/add")
+    loc = req.body.location;
+    temp = req.body.temperature;
+    range = req.body.range;
 
     console.log(loc + " " + temp + " " + range)
 });
 
-app.listen(app.get('port'), function() {    
-    console.log('Server listening on port ' + app.get('port')); 
-});
+// Result Page 
+app.post("/result.html", (req, res) => {
+    outfitdbModel.find({}, function (error, documents) {
+        db = documents;
+        console.log(documents)
 
-/*
-    var loc = request.body.location;
-    var temp = request.body.temperature;
-    var range = request.body.range;
-    //console.log(db);
-    calClothing(loc, temp, range, response);
-    //response.send(calClothing(loc, temp, range));
-*/
+        console.log("/result.html")
+        console.log(loc + " " + temp + " " + range)
+        //console.log(db)
 
-/*
-app.get('/adddelete.html', function(req,res) {
-    //console.log("Hello")
-    data= fs.readFile('/../front-end/adddelete.html',   function (err, data) {
-        res.setHeader('Content-Type', 'text/html');
-        res.send(data);
+        var topExist = false;
+        var botExist = false;
+        var accExist = false;
+
+        for (var i = 0; i < db.length; i++){
+            if (db[i].type == 'top') {
+                topExist = true;
+            }
+
+            if (db[i].type == 'bot') {
+                botExist = true;
+            }
+
+            if (db[i].type == 'acc') {
+                accExist = true;
+            }
+        }
+
+        if (typeof loc !== 'undefined' && typeof temp !== 'undefined' && typeof range !== 'undefined' && topExist && botExist && accExist) {
+            calClothing(loc, temp, range, res)
+        } else {
+            res.send("Please input at least one Top, Bottom and Accessory Item. Also, please make sure that you have submitted Location, Temperature and Temperature Variance.");
+        }  
     });
 });
 
-app.post("/adddelete.html/add", (req, res) => {
+app.post("/result.html/delete", (req, res) =>{
 
-    var awesome_instance = new tobedeleted(req.body);
-    //console.log(awesome_instance)
-
-    awesome_instance.save(function (err, book) {
-        if (err) return console.error(err);
-        console.log(book.name + " saved to bookstore collection.");
-    }); 
-});
-
-app.post("/adddelete.html/delete", (req, res) =>{
-
-    mongoose.connection.dropCollection("tobedeleteds", function (err, result) {
+    mongoose.connection.dropCollection(user+"s", function (err, result) {
         if (err) {
             console.log("error delete collection");
         } else {
-
             console.log("delete collection success");
         }
     });
+});
+
+app.listen(app.get('port'), function() {    
+    console.log('Server listening on port ' + app.get('port')); 
 });
 
 function calClothing(location, comfortTemp, rangeTemp, response) {
@@ -149,7 +139,7 @@ function calClothing(location, comfortTemp, rangeTemp, response) {
             bot.push(element)
         }
 
-        if (element.type == 'accessory') {
+        if (element.type == 'acc') {
             switch(element.weather) {
                 case 'snowy':
                     acc.snowy.push({name: element.name,
@@ -170,6 +160,10 @@ function calClothing(location, comfortTemp, rangeTemp, response) {
             }
         }
     });
+
+    console.log(top)
+    console.log(bot)
+    console.log(acc)
 
     $.getJSON("https://api.apixu.com/v1/forecast.json?key=03ab689a2dc0497d86e214654191303&q=" + location, function(data){
         //console.log(data.current.condition.code)
@@ -248,4 +242,3 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
-*/

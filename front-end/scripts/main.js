@@ -19,13 +19,14 @@ $(document).ready(function() {
         var type = document.getElementById("type").value;
         var name = document.getElementById("name").value;
         var heat = document.getElementById("heat").value;
+        var weather = document.getElementById("weather").value;
 
         console.log(type + " " + name + " " + heat)
 
         $.ajax({
             method: 'post',
-            url: '/add.html/add',
-            data: JSON.stringify({ type: type, name: name, heat: heat }),
+            url: '/add.html',
+            data: JSON.stringify({ type: type, name: name, heat: heat, weather: weather}),
             contentType: 'application/json',
         })
     });
@@ -38,9 +39,9 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'post',
-            url: '/weather.html/add',
+            url: '/weather.html',
             data: JSON.stringify({ location: location, temperature: temperature, range: range }),
-            contentType: 'application/json',
+            contentType: 'application/json'
         })
     });
 
@@ -49,76 +50,29 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'post',
-            url: '/result.html/add',
-
-            success: function(data) {
-                console.log(data)
-                $("#result").html(data.top)
-            }
-        })
-    });
-    /*
-    $("#form").submit(function(event){
-        event.preventDefault();
-        var location = document.getElementById("loc").value;
-        var temperature = document.getElementById("temp").value;
-        var range = document.getElementById("range").value;
-
-        $.ajax({
-            method: 'post',
-            url: '/',
-            data: JSON.stringify({ location: location, temperature: temperature, range: range }),
+            url: '/result.html',
             contentType: 'application/json',
 
             success: function(data) {
-                console.log("form")
                 console.log(data)
-                //console.log(data.type)
-                //$("#result").html(data.top);
+                if (data.constructor == Object) {
+                    $("#result").html(data.top)
+                } else {
+                    $("#result").html(data)
+                }
             }
         })
     });
-
-    $("#clothingForm").submit(function(event){
-        event.preventDefault();
-        var type = document.getElementById("type").value;
-        var name = document.getElementById("name").value;
-        var heat = document.getElementById("heat").value;
-        console.log(type + " " + name + " " + heat)
-        $.ajax({
-            method: 'post',
-            url: '/adddelete.html/add',
-            data: JSON.stringify({ type: type, name: name, heat: heat }),
-            contentType: 'application/json',
-        })
-    });
-
+    
     $("#deleteForm").submit(function(event){
         event.preventDefault();
 
         $.ajax({
             method: 'post',
-            url: '/adddelete.html/delete',
+            url: '/result.html/delete',
             contentType: 'application/json',
         })
     });
-
-    $("#resultForm").submit(function(event){
-        event.preventDefault();
-
-        $.ajax({
-            method: 'post',
-            url: '/result.htm/result',
-            contentType: 'application/json',
-
-            success: function(data) {
-                console.log("resultForm")
-                console.log(data)
-                $("#result").html(data.top);
-            }
-        })
-    });
-    */
 });
 
 function add() {
